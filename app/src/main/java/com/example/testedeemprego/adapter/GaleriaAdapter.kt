@@ -1,36 +1,47 @@
 package com.example.testedeemprego.adapter
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.example.testedeemprego.databinding.ActivityMainBinding
 import com.example.testedeemprego.databinding.ItemListaBinding
+import com.squareup.picasso.Picasso
 
 
 class GaleriaAdapter : Adapter<GaleriaAdapter.GaleriaViewHolder>() {
 
-    fun adicionarLista(){
+    private var listaImagens = emptyList<String>()
 
+    fun adicionarLista( lista : List<String>){
+        listaImagens = lista
+        notifyDataSetChanged()
     }
 
-    inner class GaleriaViewHolder(binding: ItemListaBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class GaleriaViewHolder(val binding: ItemListaBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(){
+        fun bind( url: String ) {
 
+            Picasso.get()
+                .load( url )
+                .into(binding.imageItem)
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GaleriaViewHolder {
-        TODO("Not yet implemented")
-    }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val itemView = ItemListaBinding.inflate( layoutInflater, parent, false )
+        return GaleriaViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: GaleriaViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val url = listaImagens[position]
+        holder.bind( url )
     }
+
+    override fun getItemCount(): Int {
+        return listaImagens.size
+    }
+
 }
